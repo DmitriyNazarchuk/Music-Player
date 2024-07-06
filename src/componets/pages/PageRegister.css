@@ -1,6 +1,4 @@
-body {
-    overflow: hidden;
-}
+
 .container {
     display: flex;
     justify-content: center;
@@ -114,4 +112,5 @@ body {
 .text-center {
     text-align: center;
     color: #f8f8f8;
-}
+
+} 

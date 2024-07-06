@@ -1,6 +1,9 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { api } from "./api";
 import authSlice from './slice/authSlice';
+import playerSlice from "./slice/playerSlice";
+import { setDuration, nextTrack, setCurrentTime, audio } from './slice/playerSlice';
+import  searchSlice from './slice/searchSlice'
 import { 
     persistStore, 
     persistReducer,
@@ -20,6 +23,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     auth: authSlice,
+    player: playerSlice,
+    search: searchSlice,
 });
 
 const  persistedReducer =  persistReducer(persistConfig, rootReducer);
@@ -35,4 +40,24 @@ const store = configureStore({
 });
 
 export const persistor = persistStore(store);
+
+
+store.subscribe(() => {
+    const { dispatch } = store;
+    if (audio) {   
+        audio.onended = () => dispatch(nextTrack());
+        audio.ondurationchange = () => dispatch(setDuration(audio.duration));
+        audio.ontimeupdate = () => dispatch(setCurrentTime(audio.currentTime));
+    }
+  });
+
 export default store;
+
+
+
+
+
+
+
+
+

@@ -1,29 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { jwtDecode } from 'jwt-decode'
+import { createSlice} from '@reduxjs/toolkit';
+import { jwtDecode } from 'jwt-decode';
 
-export const authSlice = createSlice({
+export const authSlice =  createSlice({
     name: 'auth',
-    initialState: { token: null, 
-                    payload: null, 
-                    aboutMe: null},
+    initialState: {token: null, payload: null, aboutMe: null},
     reducers: {
         logIn(state, {payload:token}){
             const payload = jwtDecode(token)
-            if ({payload:token}){
+            if (payload){
                 state.payload = payload
-                state.token = token
+                state.token   = token
             }
         },
         logout(state){
             state.payload = null
-            state.token = null
+            state.token   = null
         },
         setAboutMe (state, {payload: aboutMe}) {
             state.aboutMe = aboutMe
         },
-      
     }
 })
 
-export const { logIn, logout, } = authSlice.actions
+export const {logIn, logout, setAboutMe} = authSlice.actions
 export default authSlice.reducer

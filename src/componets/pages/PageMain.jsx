@@ -1,18 +1,12 @@
 import React from 'react';
-
 import PageRegister from './PageRegister';
 import './PageRegister.css';
 
-const PageMain = ({ props: isLoggedIn }) => {
+const PageMain = (prop) => {
+    const isLoggedIn = prop.props;
     return (
         <>
-            {isLoggedIn ? (
-                <div className="container">
-                    <div className="text-center">
-                        <h4>Welcome to Youtube Music</h4>
-                    </div>
-                </div>
-            ) : (
+            {!isLoggedIn && (
                 <div className="wrapper">
                     <div className="box">
                         <div className="text-center">

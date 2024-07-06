@@ -5,7 +5,6 @@ import { useLoginMutation, useRegistrationMutation } from "../../redux/api";
 import { logIn } from "../../redux/slice/authSlice";
 import "./PageRegister.css";
 
-
 function validateLogin(login) {
   return login.length > 0;
 }
@@ -17,10 +16,11 @@ function validatePassword(password) {
 function validateRepeatPassword(password, repeatPassword) {
   return password === repeatPassword;
 }
+
 export default function PageRegister(prop) {
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPassword, setRepeatPassword] = useState("");
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const [loginError, setLoginError] = useState(false);
@@ -29,101 +29,95 @@ export default function PageRegister(prop) {
   const [loginQuery] = useLoginMutation();
   const [registrationMutation] = useRegistrationMutation();
   const [selectLog, selectOnLog] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onReg = async () => {
-    setLoading(true);
-    try {
-      const response = await registrationMutation({ login, password });
-      if (response.data.createUser !== null) {
-        const res = await loginQuery({ login, password });
-        setLoading(false);
-        if (res.data) {
-          dispatch(logIn(res.data.login));
-          setLogin("");
-          setPassword("");
-          navigate("/");
-        }
-      } else {
-        setLoading(false);
-        console.error("Registration failed");
+      setLoading(true);
+      try {
+          const response = await registrationMutation({ login, password });
+          if (response.data.createUser !== null) {
+              const res = await loginQuery({ login, password });
+              setLoading(false);
+              if (res.data) {
+                  dispatch(logIn(res.data.login));
+                  setLogin('');
+                  setPassword('');
+                  navigate("/");
+              }
+          }
+      } catch (error) {
+          console.error('Помилка авторизації', error);
+          setLoading(false);
       }
-    } catch (error) {
-      console.error("Authorization error", error);
-      setLoading(false);
-    }
   };
 
   const onLogin = async () => {
-    setLoading(true);
-    try {
-      const response = await loginQuery({ login, password });
-      setLoading(false);
-      if (response.data) {
-        dispatch(logIn(response.data.login));
-        setLogin("");
-        setPassword("");
-        navigate("/");
-      } else {
-        console.error("Login failed");
+      setLoading(true);
+      try {
+          const response = await loginQuery({ login, password });
+          setLoading(false);
+          if (response.data) {
+              dispatch(logIn(response.data.login));
+              setLogin('');
+              setPassword('');
+              navigate("/");
+          }
+      } catch (error) {
+          console.error('Помилка авторизації', error);
+          setLoading(false);
       }
-    } catch (error) {
-      console.error("Authorization error", error);
-      setLoading(false);
+  };
+
+  // Validation
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (selectLog) {
+      if (validateLogin(login) && validatePassword(password)) {
+        onLogin(login, password);
+      } else {
+        setLoginError(!validateLogin(login));
+        setPasswordError(!validatePassword(password));
+      }
+    } else {
+      if (validateLogin(login) && validatePassword(password) && validateRepeatPassword(password, repeatPassword)) {
+        onReg(login, password);
+      }
+      else {
+        setLoginError(!validateLogin(login));
+        setPasswordError(!validatePassword(password));
+        setRepeatPasswordError(!validateRepeatPassword(password, repeatPassword));
+      }
     }
   };
 
-// Validation
-const handleSubmit = (event) => {
-    event.preventDefault();
-    if (selectLog) {
-        if (validateLogin(login) && validatePassword(password)) {
-            onLogin(login, password);
-        } else {
-            setLoginError(!validateLogin(login));
-            setPasswordError(!validatePassword(password));
-        }
-    } else {
-        if (validateLogin(login) && validatePassword(password) && validateRepeatPassword(password, repeatPassword)) {
-            onReg(login, password);
-        }
-        else {
-            setLoginError(!validateLogin(login));
-            setPasswordError(!validatePassword(password));
-            setRepeatPasswordError(!validateRepeatPassword(password, repeatPassword));
-        }
-    }
-};
-
-const handleLoginChange = (e) => {
+  const handleLoginChange = (e) => {
     const value = e.target.value;
     setLogin(value);
     if (validateLogin(value)) {
-        setLoginError(false);
+      setLoginError(false);
     }
-};
+  };
 
-const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
     if (validatePassword(value)) {
-        setPasswordError(false);
+      setPasswordError(false);
     }
-};
+  };
 
-const handleRepeatPasswordChange = (e) => {
+  const handleRepeatPasswordChange = (e) => {
     const value = e.target.value;
     setRepeatPassword(value);
     if (validateRepeatPassword(password, value)) {
-        setRepeatPasswordError(false);
+      setRepeatPasswordError(false);
     }
-};
+  };
 
   return (
-    // loading
     <div className="container">
       <div className="card">
         <div className="text-center" style={{ margin: "32px 16px" }}>
