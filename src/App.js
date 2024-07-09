@@ -9,6 +9,8 @@ import PageSearchTracks from './componets/pages/PageSearchTracks';
 import PageTracks from './componets/pages/PageTracks'
 import FooterPlayer from "./componets/FooterPlayer";
 import {useSelector} from 'react-redux';
+import PagePlayList from "./componets/pages/PagePlayList";
+import PageSinglePlaylist from "./componets/pages/PageSinglePlaylist";
 
 function App() {
 
@@ -38,6 +40,9 @@ function App() {
             <Route element={<Aside />} >
               <Route path="/" element={<PageMain props={isLoggedIn} />} /> 
               <Route path="tracks" element={<PageTracks />} />
+              <Route path="playlists" element={<PagePlayList />} />
+              <Route path="search" element={<PageSearchTracks />} />
+              <Route path="playlist/:id" element={<PageSinglePlaylist/>} />
 
             </Route>
           </>
@@ -45,7 +50,11 @@ function App() {
           <>
             <Route path="/" element={<PageMain props={isLoggedIn} />} />
             <Route element={<Aside />} >
-   
+            <Route path="playlists" element={<PagePlayList />} />
+            <Route path="search" element={<PageSearchTracks />} />
+            <Route path="playlist/:id" element={<PageSinglePlaylist/>} />
+
+
              
             </Route>
           </>

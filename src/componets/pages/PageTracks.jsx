@@ -13,8 +13,8 @@ const PageTracks = () => {
     const dispatch = useDispatch();
     const playerState = useSelector(state => state.persistedReducer.player);
     const [track, setTrackById] = useState(playerState.track);
-    const { data, isLoading } = useGetTracksQuery()
-
+    const { data, isLoading } = useGetTracksQuery({skip:0,limit:50})
+    console.log(data)
     let playlist;
     if (!isLoading) {
         playlist = data;
@@ -63,8 +63,8 @@ const PageTracks = () => {
                             <TableCell>Виконавець</TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
-                        {tracksToDisplay.map((item, index) =>
+                    <TableBody>  // try catch для ошибки старых треков
+                        {tracksToDisplay.map((item, index) =>    
                             <TableRow key={index}>
                                 <TableCell >
                                     {playerState?.track?._id === item._id && playerState?.isPlaying === true ?
