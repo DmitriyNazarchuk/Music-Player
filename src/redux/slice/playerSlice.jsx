@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
 const initialState = {
   isPlaying: false,
@@ -9,6 +10,7 @@ const initialState = {
   playlistIndex: 0,
   currentTime: 0,
   volume: 0.5,
+  error: null,
 };
 
 export const audio = new Audio();
@@ -37,17 +39,57 @@ const playerSlice = createSlice({
   initialState,
   reducers: {
     play(state) {
+        
       if (state.track && state.track.url) {
-        if (audio.src !== `${backendUrl}${state.track.url}`) {
-          audio.src = `${backendUrl}${state.track.url}`;
-          audio.load();
-        }
-        audio.volume = state.volume;
-        audio.play();
-        state.isPlaying = true;
-        state.isStopped = false;
+          if (audio.src !== `${backendUrl}${state.track.url}`) {
+              audio.src = `${backendUrl}${state.track.url}`
+              audio.load()
+          }
+          audio.volume = state.volume;
+          audio.play()
+          state.isPlaying = true
+          state.isStopped = false
       }
     },
+  // Реплей
+  replay(state) {
+    if (state.track && state.track.url) {
+      if (audio.src !== `${backendUrl}${state.track.url}`) {
+        audio.src = `${backendUrl}${state.track.url}`
+        audio.load()
+      }
+      audio.currentTime = state.currentTime;
+      audio.volume = state.volume;
+      audio.play();
+      state.isPlaying = true;
+      state.isStopped = false;
+    }
+  },
+    // play(state) {
+    //   try {
+    //     if (state.track && state.track.url) {
+    //       if (audio.src !== `${backendUrl}${state.track.url}`) {
+    //         audio.src = `${backendUrl}${state.track.url}`;
+    //         audio.load();
+    //       }
+    //       console.log(audio)
+    //       audio.volume = state.volume;
+    //       if (audio.play!== undefined) {
+    //       audio.play().then(() => {
+    //         state.isPlaying = true
+    //         state.isStopped = false
+    //       }).catch(error => {
+    //         console.error("Error playing audio:", error);
+    //         state.error = error;
+    //       })};
+    //     }
+    //   } catch (error) {
+
+    //     console.error("Error playing audio:", error);
+    //   }
+    // },
+    
+
     pause(state) {
       audio.pause();
       state.isPlaying = false;
@@ -55,8 +97,8 @@ const playerSlice = createSlice({
     stop(state) {
       state.currentTime = 0;
       audio.pause();
-      state.isPlaying = false;
-      state.isStopped = true;
+      
+      
     },
     setTrack(state, { payload }) {
       state.track = payload;
@@ -121,6 +163,7 @@ const playerSlice = createSlice({
 
 export const {
   play,
+  replay,
   pause,
   stop,
   setTrack,

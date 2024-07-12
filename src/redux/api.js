@@ -91,19 +91,6 @@ export const api = createApi({
       })
     }),
     getTracks: builder.query({
-      // query: () => ({
-      //   document: `
-      //             query trackFull {
-      //                 TrackFind (query:"[{}]"){
-      //                 _id url 
-      //                 id3 {
-      //                     title
-      //                     artist
-      //                     album
-      //                     }
-      //                 }
-      //             }`,
-      // })
       query: ({ skip = 0, limit = 10 }) => ({
         document: `query trackFull($q: String) {
                     TrackFind(query: $q){
