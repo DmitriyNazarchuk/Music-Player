@@ -4,6 +4,7 @@ import { PlayArrow, PauseRounded } from "@mui/icons-material";
 
 const TrackList = ({ tracks, track, isPlaying, handlePlay, handleStop }) => {
     return (
+        
       <TableBody>
         {tracks &&
           Array.isArray(tracks) &&

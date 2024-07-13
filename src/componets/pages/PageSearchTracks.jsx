@@ -16,8 +16,8 @@ const PageSearchTracks = () => {
     const totalTracks = tracks?.length || 0;
     const tracksPerPage = 50;
     const totalPages = Math.ceil(totalTracks / tracksPerPage);
-    const [currentPage, setCurrentPage] = useState(1); // Стан для відстеження поточної сторінки
-    const startIndex = (currentPage - 1) * tracksPerPage; // Обчислюємо індекси треків, які мають відображатись на поточній сторінці
+    const [currentPage, setCurrentPage] = useState(1); 
+    const startIndex = (currentPage - 1) * tracksPerPage;
     const endIndex = startIndex + tracksPerPage;
     const tracksToDisplay = tracks?.slice(startIndex, endIndex);
   

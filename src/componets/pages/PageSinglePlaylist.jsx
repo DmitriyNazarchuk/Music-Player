@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useGetPlaylistIdQuery } from '../../redux/api';
-import { CircularProgress, Grid, Box, Typography, CardContent, TableBody, TableRow, TableCell, Table, TableHead, TableContainer, Paper } from "@mui/material";
+import { CircularProgress, Box, Typography, TableBody, TableRow, TableCell, Table, TableHead, TableContainer, Paper } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import { PlayArrow } from "@mui/icons-material";
