@@ -1,56 +1,52 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
-import { graphqlRequestBaseQuery } from '@rtk-query/graphql-request-base-query'
-
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { graphqlRequestBaseQuery } from "@rtk-query/graphql-request-base-query";
 
 export const api = createApi({
-  reducerPath: 'api',
+  reducerPath: "api",
   baseQuery: graphqlRequestBaseQuery({
-    url: 'http://player.node.ed.asmer.org.ua/graphql',
+    url: "http://player.node.ed.asmer.org.ua/graphql",
     prepareHeaders: (headers, { getState }) => {
       const authState = getState().persistedReducer.auth;
       if (authState && authState.token) {
-        headers.set('Authorization', `Bearer ${authState.token}`);
+        headers.set("Authorization", `Bearer ${authState.token}`);
       }
       return headers;
-    } 
+    },
   }),
   endpoints: (builder) => ({
     login: builder.mutation({
       query: ({ login, password }) => ({
-        document: 
-                `query login($login: String!, $password: String!) {
+        document: `query login($login: String!, $password: String!) {
                     login(login: $login, password: $password) 
                 }`,
         variables: { login, password },
-      })
+      }),
     }),
     registration: builder.mutation({
       query: ({ login, password }) => ({
-        document: 
-                `mutation reg ($login:String! ,$password:String!){
+        document: `mutation reg ($login:String! ,$password:String!){
                     createUser(login:$login ,password:$password) { 
                       _id login}
                 }`,
-       
-        variables: { login, password }, 
-      })
+
+        variables: { login, password },
+      }),
     }),
     getUserById: builder.query({
       query: ({ _id }) => ({
-        document:
-          `query oneUser($query: String){
+        document: `query oneUser($query: String){
                 UserFindOne(query: $query){
                     _id login nick avatar{ url }
                 }
             }`,
-        variables: { query: JSON.stringify([{ _id }]) }
+        variables: { query: JSON.stringify([{ _id }]) },
       }),
       providesTags: (result, error, { _id }) => {
-        return ([{ type: 'User', id: _id }])
-      }
+        return [{ type: "User", id: _id }];
+      },
     }),
     passwordChange: builder.mutation({
-     query: ({ login, password, newPassword }) => ({
+      query: ({ login, password, newPassword }) => ({
         document: `
                 mutation passwordChange ($login: String!, $password: String!, $newPassword: String!) {
                     changePassword(login:$login, password:$password, newPassword: $newPassword){
@@ -59,8 +55,8 @@ export const api = createApi({
                     } 
                 }
             `,
-        variables: { login, password, newPassword }
-      })
+        variables: { login, password, newPassword },
+      }),
     }),
     setUserNick: builder.mutation({
       query: ({ _id, nick }) => ({
@@ -71,9 +67,9 @@ export const api = createApi({
                     }
                 }
                 `,
-        variables: { _id, nick }
+        variables: { _id, nick },
       }),
-      invalidatesTags: (result, error, arg) => ([{ type: 'User', id: arg._id }])
+      invalidatesTags: (result, error, arg) => [{ type: "User", id: arg._id }],
     }),
     setAvatar: builder.mutation({
       query: ({ idUser, idImg }) => ({
@@ -87,11 +83,11 @@ export const api = createApi({
                     }
                 }
                 `,
-        variables: { idUser, idImg }
-      })
+        variables: { idUser, idImg },
+      }),
     }),
     getTracks: builder.query({
-      query: ({ skip = 0, limit = 10 }) => ({
+      query: ({ skip = 0, limit = 10, title = "" }) => ({
         document: `query trackFull($q: String) {
                     TrackFind(query: $q){
                         _id url 
@@ -104,14 +100,25 @@ export const api = createApi({
                     }
 }`,
         variables: {
-            q: JSON.stringify([{}, {
-                sort: [{ _id: -1 }],
-                skip: [skip],
-                limit: [limit]
-            }])
-        }
-    })
+          q: JSON.stringify([
+            { "id3.title": `/${title}/` },
+            {
+              sort: [{ _id: -1 }],
+              skip: [skip],
+              limit: [limit],
+            },
+          ]),
+        },
+      }),
     }),
+    getTracksCount: builder.query({
+      query: () => ({
+        document: `query {
+                          TrackCount(query: "[{}]")
+                        }`,
+      }),
+    }),
+
     getTrackId: builder.query({
       query: ({ _id }) => ({
         document: `
@@ -126,8 +133,8 @@ export const api = createApi({
                 }
               }
             `,
-        variables: { idTrack: JSON.stringify([{ _id }]) }
-      })
+        variables: { idTrack: JSON.stringify([{ _id }]) },
+      }),
     }),
     getPlaylistsMy: builder.query({
       query: ({ idUser }) => ({
@@ -149,8 +156,8 @@ export const api = createApi({
                     }
                   }
                 `,
-        variables: { idUser: JSON.stringify([{ "___owner": `${idUser}` }]) }
-      })
+        variables: { idUser: JSON.stringify([{ ___owner: `${idUser}` }]) },
+      }),
     }),
     getTracksMy: builder.query({
       query: ({ idUser }) => ({
@@ -166,8 +173,8 @@ export const api = createApi({
                         }
                     }
                 `,
-        variables: { idUser: JSON.stringify([{ "___owner": `${idUser}` }]) }
-      })
+        variables: { idUser: JSON.stringify([{ ___owner: `${idUser}` }]) },
+      }),
     }),
     getPlaylist: builder.query({
       query: () => ({
@@ -181,8 +188,8 @@ export const api = createApi({
                         }
                         }
                     }
-                `
-      })
+                `,
+      }),
     }),
     getPlaylistId: builder.query({
       query: ({ _id }) => ({
@@ -197,8 +204,8 @@ export const api = createApi({
                     }
                 }
                 `,
-        variables: { _id: JSON.stringify([{ _id }]) }
-      })
+        variables: { _id: JSON.stringify([{ _id }]) },
+      }),
     }),
     deletePlaylist: builder.mutation({
       query: ({ playlistId }) => ({
@@ -209,8 +216,8 @@ export const api = createApi({
                         }
                     }
                 `,
-        variables: { playlistId }
-      })
+        variables: { playlistId },
+      }),
     }),
     upsertPlaylist: builder.mutation({
       query: ({ playlistId, namePls, descriptionPls, tracksId }) => ({
@@ -235,8 +242,8 @@ export const api = createApi({
                             }
                         }
                     `,
-        variables: { playlistId, namePls, descriptionPls, tracksId }
-      })
+        variables: { playlistId, namePls, descriptionPls, tracksId },
+      }),
     }),
     searchTrack: builder.query({
       query: ({ title }) => ({
@@ -252,11 +259,10 @@ export const api = createApi({
                         }
                     }
                     `,
-        variables: { title: JSON.stringify([{ "id3.title": `/${title}/` }]) }
-      })
+        variables: { title: JSON.stringify([{ "id3.title": `/${title}/` }]) },
+      }),
     }),
-
-  })
+  }),
 });
 
 export const {
@@ -274,4 +280,6 @@ export const {
   useGetPlaylistIdQuery,
   useDeletePlaylistMutation,
   useUpsertPlaylistMutation,
-  useSearchTrackQuery} = api;
+  useSearchTrackQuery,
+  useGetTracksCountQuery,
+} = api;

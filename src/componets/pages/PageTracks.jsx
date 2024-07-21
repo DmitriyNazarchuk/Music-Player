@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { useGetTracksQuery } from "../../redux/api";
+import { useGetTracksQuery, useGetTracksCountQuery } from "../../redux/api";
 import {
   CircularProgress,
   CardContent,
@@ -11,9 +11,10 @@ import {
   Box,
   Paper,
   Typography,
+  IconButton,
+  InputBase,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { IconButton } from "@mui/material";
 import { setTrack, play, pause, replay } from "../../redux/slice/playerSlice";
 import TrackList from "./TrackList";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -22,37 +23,34 @@ const tracksPerPage = 50;
 
 const PageTracks = () => {
   const dispatch = useDispatch();
+  const [page, setPage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
   const track = useSelector((state) => state.persistedReducer.player.track);
   const isPlaying = useSelector(
     (state) => state.persistedReducer.player.isPlaying
   );
-  const { data: playlist, isLoading } = useGetTracksQuery({
-    skip: 0,
-    limit: 1000,
+  const { data: playlist, isLoading, title} = useGetTracksQuery({
+    skip: tracksPerPage * page,
+    limit: tracksPerPage,
+    title: searchQuery,
   });
 
+  const { data: count } = useGetTracksCountQuery({
+    title: searchQuery,
+  });
   const [displayedTracks, setDisplayedTracks] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
+  console.log(count, displayedTracks);
 
   useEffect(() => {
-    if (playlist) {
-      setDisplayedTracks(playlist.TrackFind.slice(0, tracksPerPage));
+    if (playlist && playlist.TrackFind && playlist.TrackFind.length) {
+      console.log(playlist);
+      setDisplayedTracks((tracks) => [...tracks, ...playlist.TrackFind]);
     }
   }, [playlist]);
 
   const fetchMoreTracks = () => {
-    if (displayedTracks.length >= (playlist?.TrackFind.length || 0)) {
-      setHasMore(false);
-      return;
-    }
-    const nextTracks = playlist.TrackFind.slice(
-      displayedTracks.length,
-      displayedTracks.length + tracksPerPage
-    );
-    setDisplayedTracks((prevTracks) => [...prevTracks, ...nextTracks]);
+    setPage((page) => page + 1);
   };
-
-  const tracksToDisplay = useMemo(() => displayedTracks, [displayedTracks]);
 
   const handlePlay = (track) => {
     dispatch(setTrack(track));
@@ -84,11 +82,21 @@ const PageTracks = () => {
         <Typography component="h1" variant="h4" sx={{ marginBottom: "10px" }}>
           Треки
         </Typography>
+        <InputBase
+          sx={{ width: "400px", color: "#000" }}
+          placeholder="Пошук музики…"
+          value={searchQuery}
+          onChange={(e) => {
+            setPage(0);
+            setDisplayedTracks([]);
+            setSearchQuery(e.target.value);
+          }}
+        />
       </CardContent>
       <InfiniteScroll
-        dataLength={tracksToDisplay.length}
+        dataLength={displayedTracks.length}
         next={fetchMoreTracks}
-        hasMore={hasMore}
+        hasMore={displayedTracks.length < count.TrackCount}
         loader={<CircularProgress />}
         endMessage={
           <Typography style={{ textAlign: "center" }}>
@@ -110,7 +118,7 @@ const PageTracks = () => {
               </TableRow>
             </TableHead>
             <TrackList
-              tracks={tracksToDisplay}
+              tracks={displayedTracks}
               track={track}
               isPlaying={isPlaying}
               handlePlay={handlePlay}
