@@ -11,6 +11,7 @@ import FooterPlayer from "./componets/FooterPlayer";
 import {useSelector} from 'react-redux';
 import PagePlayList from "./componets/pages/PagePlayList";
 import PageSinglePlaylist from "./componets/pages/PageSinglePlaylist";
+import PageMyPlaylist from "./componets/pages/PageMyPlaylist";
 
 function App() {
 
@@ -43,7 +44,7 @@ function App() {
               <Route path="playlists" element={<PagePlayList />} />
               <Route path="search" element={<PageSearchTracks />} />
               <Route path="playlist/:id" element={<PageSinglePlaylist/>} />
-
+              <Route path="myPlaylist" element={<PageMyPlaylist />} />
             </Route>
           </>
           :
@@ -53,7 +54,7 @@ function App() {
             <Route path="playlists" element={<PagePlayList />} />
             <Route path="search" element={<PageSearchTracks />} />
             <Route path="playlist/:id" element={<PageSinglePlaylist/>} />
-
+            <Route path="myPlaylist" element={<PageMyPlaylist />} />
 
              
             </Route>
