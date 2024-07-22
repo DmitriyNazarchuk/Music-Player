@@ -13,6 +13,8 @@ import PagePlayList from "./componets/pages/PagePlayList";
 import PageSinglePlaylist from "./componets/pages/PageSinglePlaylist";
 import PageMyPlaylist from "./componets/pages/PageMyPlaylist";
 import PageCreatingAndEditingPlaylist from "./componets/pages/PageCreatingAndEditingPlaylist";
+import PageProfileEditing from './componets/pages/PageProfileEditing';
+import PageMyTracks from "./componets/pages/PageMyTracks";
 
 function App() {
 
@@ -40,26 +42,30 @@ function App() {
         {isLoggedIn ?
           <>
             <Route element={<Aside />} >
-              <Route path="/" element={<PageMain props={isLoggedIn} />} /> 
+              <Route path="/" element={<PageTracks />} />
               <Route path="tracks" element={<PageTracks />} />
               <Route path="playlists" element={<PagePlayList />} />
               <Route path="search" element={<PageSearchTracks />} />
               <Route path="playlist/:id" element={<PageSinglePlaylist/>} />
               <Route path="myPlaylist" element={<PageMyPlaylist />} />
               <Route path="creatingPlaylist" element={<PageCreatingAndEditingPlaylist />} />
+              <Route path="editPlaylist/:id" element={<PageCreatingAndEditingPlaylist />} />
+              <Route path="profileEditing" element={<PageProfileEditing />} />
+              <Route path="myTracks" element={<PageMyTracks />} />
             </Route>
           </>
           :
           <>
             <Route path="/" element={<PageMain props={isLoggedIn} />} />
             <Route element={<Aside />} >
-            <Route path="playlists" element={<PagePlayList />} />
-            <Route path="search" element={<PageSearchTracks />} />
-            <Route path="playlist/:id" element={<PageSinglePlaylist/>} />
-            <Route path="myPlaylist" element={<PageMyPlaylist />} />
-            <Route path="creatingPlaylist" element={<PageCreatingAndEditingPlaylist />} />
-
-             
+              <Route path="playlists" element={<PagePlayList />} />
+              <Route path="search" element={<PageSearchTracks />} />
+              <Route path="playlist/:id" element={<PageSinglePlaylist/>} />
+              <Route path="myPlaylist" element={<PageMyPlaylist />} />
+              <Route path="creatingPlaylist" element={<PageCreatingAndEditingPlaylist />} />
+              <Route path="editPlaylist/:id" element={<PageCreatingAndEditingPlaylist />} />
+              <Route path="profileEditing" element={<PageProfileEditing />} />
+              <Route path="myTracks" element={<PageMyTracks />} />
             </Route>
           </>
         }
@@ -68,6 +74,5 @@ function App() {
     </Router>
   );
 }
-
 
 export default App;
