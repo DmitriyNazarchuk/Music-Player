@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import { PlayArrow } from "@mui/icons-material";
 import { useDispatch, useSelector } from 'react-redux';
-import { setTrack, play, stop, setPlaylist } from '../../redux/slice/playerSlice';
+import { setTrack, play, pause, replay, setPlaylist } from '../../redux/slice/playerSlice';
 import PauseRounded from '@mui/icons-material/PauseRounded';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -18,6 +18,9 @@ const PageSinglePlaylist = () => {
     const [track, setTrackById] = useState(playerState.track);
     const [tracks, setTracks] = useState([]);
     const dispatch = useDispatch();
+    const isPlaying = useSelector(
+        (state) => state.persistedReducer.player.isPlaying
+      );
 
     useEffect(() => {
         if (data?.PlaylistFindOne) {
@@ -34,8 +37,12 @@ const PageSinglePlaylist = () => {
     };
 
     const handleStop = () => {
-        dispatch(stop());
-    };
+        if (isPlaying) {
+          dispatch(pause());
+        } else {
+          dispatch(replay());
+        }
+      };
 
     const handleDragEnd = (result) => {
         if (!result.destination) {
