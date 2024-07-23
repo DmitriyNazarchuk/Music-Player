@@ -218,20 +218,21 @@ const PageCreatingAndEditingPlaylist = () => {
                 <Box component="form" sx={{ width: '600px' }} >
                     <Box sx={{ my: 2, display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }} >
                         <Box>
-                            <Typography variant="body2" sx={{ my: 5, textAlign: 'center' }}>
+                            <Typography variant="body2" sx={{color:"#ced4d2", textAlign: 'center' }}>
                                 Завантажити трек:
                             </Typography>
                         </Box>
-                        <Box sx={{ mx: 9, width: '300px' }}>
+                        <Box sx={{ width: '300px' }}>
                             <Basic uploadResult={handleUploadResult} prop={loadFile} />
                         </Box>
                     </Box>
-                    <Grid container sx={{ my: 2, display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
+                    <Grid container sx={{display: 'flex', flexDirection: 'row', color:"#ced4d2", alignItems: 'flex-start' }}>
                         <Grid item xs={4}   >
                             Назва плейлиста:
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={6} sx={{color:"#ced4d2",}}>
                             <TextField
+                            sx={{color:"#ced4d2"}}
                                 fullWidth
                                 label="Додати назву"
                                 value={name}
@@ -240,11 +241,11 @@ const PageCreatingAndEditingPlaylist = () => {
 
                         </Grid>
                     </Grid>
-                    <Grid container sx={{ my: 2, display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }} >
+                    <Grid container sx={{ color:"#ced4d2", display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }} >
                         <Grid item xs={4}   >
                             Опис плейлиста:
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={6} sx={{color:"#ced4d2"}}>
                             <Input
                                 aria-label="Demo input"
                                 multiline placeholder="Додати опис…"
@@ -254,8 +255,8 @@ const PageCreatingAndEditingPlaylist = () => {
                         </Grid>
                     </Grid>
                     <Box sx={{ my: 5 }}>
-                        <Button variant="contained" sx={{ my: 2, mx: 2 }} onClick={() => creatPlaylist()}>Зберегти</Button>
-                        <Button variant="contained" sx={{ my: 2, mx: 2 }} onClick={() => navigate(-1)}>Вийти</Button>
+                        <Button variant="contained" sx={{ color:"#ced4d2", my: 2, mx: 2 }} onClick={() => creatPlaylist()}>Зберегти</Button>
+                        <Button variant="contained" sx={{ color:"#ced4d2", my: 2, mx: 2 }} onClick={() => navigate(-1)}>Вийти</Button>
                     </Box>
                     {id !== undefined ?
                         <>

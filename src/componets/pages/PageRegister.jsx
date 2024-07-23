@@ -118,7 +118,7 @@ export default function PageRegister(prop) {
   };
 
   return (
-    <div className="container">
+    <div className="containerReg">
       <div className="card">
         <div className="text-center" style={{ margin: "32px 16px" }}>
           <h1>{selectLog ? "Authorization" : "Registration"}</h1>

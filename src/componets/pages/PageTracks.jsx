@@ -79,19 +79,10 @@ const PageTracks = () => {
   ) : (
     <Box sx={{ padding: "5px" }}>
       <CardContent sx={{ my: 1 }}>
-        <Typography component="h1" variant="h4" sx={{ marginBottom: "10px" }}>
+        <Typography component="h1" variant="h4" sx={{ color:"#9c9b94",marginBottom: "10px" }}>
           Треки
         </Typography>
-        <InputBase
-          sx={{ width: "400px", color: "#000" }}
-          placeholder="Пошук музики…"
-          value={searchQuery}
-          onChange={(e) => {
-            setPage(0);
-            setDisplayedTracks([]);
-            setSearchQuery(e.target.value);
-          }}
-        />
+     
       </CardContent>
       <InfiniteScroll
         dataLength={displayedTracks.length}
@@ -103,7 +94,7 @@ const PageTracks = () => {
             <b>Больше треков нет</b>
           </Typography>
         }
-        style={{ overflow: "hidden" }}
+        style={{ overflow: "hidden"}}
       >
         <TableContainer component={Paper}>
           <Table aria-label="simple table">

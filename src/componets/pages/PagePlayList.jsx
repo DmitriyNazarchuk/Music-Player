@@ -28,23 +28,23 @@ export default function PagePlaylist() {
           </Box> :
           <>
             <Box sx={{ margin: '40px' }}>
-              <Typography component="h1" variant="h4" sx={{ marginBottom: '5px' }}>Плейлисти</Typography>
+              <Typography component="h1" variant="h4" sx={{color:"#d1d8d6", marginBottom: '5px' }}>Плейлисти</Typography>
             </Box>
             <Grid item sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {data?.PlaylistFind?.map((playlist, index) => (
                 playlist._id && playlist.name ?
                   <Grid item key={index} sx={{ margin: '30px' }}>
-                    <Card sx={{ maxWidth: 300, height: 180 }} >
+                    <Card sx={{background: "radial-gradient(circle, rgba(48,46,37,1) 0%, rgba(74,68,48,1) 56%);",minWidth: 300, height: 180 }} >
                       <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography sx={{color:"#d1d8d6"}} gutterBottom variant="h5" component="div">
                           {playlist.name ? playlist.name : 'Назви немає'}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography sx={{color:"#d1d8d6"}} variant="body2" color="text.secondary">
                           {playlist.description || `Description`}
                         </Typography>
                       </CardContent>
-                      <CardActions>
-                        <Button size="small" onClick={() => { toPlaylist(playlist._id) }}>Детальніше</Button>
+                      <CardActions >
+                        <Button sx={{color:"#d1d8d6"}} size="small" onClick={() => { toPlaylist(playlist._id) }}>Детальніше</Button>
                       </CardActions>
                     </Card>
                   </Grid>

@@ -1,0 +1,48 @@
+body,
+.css-11xur9t-MuiPaper-root-MuiTableContainer-root,
+.css-16dgw0d-MuiPaper-root-MuiCard-root,
+.css-rqglhn-MuiTable-root{
+    background: rgb(3,3,3);
+background: linear-gradient(322deg, rgba(3,3,3,1) 0%, rgba(80,73,49,1) 75%);
+scrollbar-width: thin;
+scrollbar-color: rgba(0, 0, 0, 0.3) #f1f1f1;
+}
+.css-1ygcj2i-MuiTableCell-root,
+.css-1ex1afd-MuiTableCell-root,
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
+    color: white !important;
+}
+.link{
+    color: #f1fbff;
+    text-decoration: none;
+}
+.icon{
+    width: 150px;
+    color: #000;
+}
+.icon:hover{ 
+    background-color:  #212121;;
+    border-radius: 50px;
+}
+.css-78trlr-MuiButtonBase-root-MuiIconButton-root{
+    color: white !important;
+}
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #212121;
+    border-radius: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: #030303;
+    border-radius: 6px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  

@@ -1,48 +1,138 @@
 import React from "react";
-import Album from '@mui/icons-material/Album';
-import Audiotrack from '@mui/icons-material/Audiotrack';
-// import Radio from '@mui/icons-material/Radio';
+import Album from "@mui/icons-material/Album";
+import Audiotrack from "@mui/icons-material/Audiotrack";
 import { NavLink, Outlet } from "react-router-dom";
-import Grid from '@mui/material/Grid';
+import Grid from "@mui/material/Grid";
 import { Box } from "@mui/material";
-import AudiotrackOutlinedIcon from '@mui/icons-material/AudiotrackOutlined';
-import AlbumOutlinedIcon from '@mui/icons-material/AlbumOutlined';
-
+import AudiotrackOutlinedIcon from "@mui/icons-material/AudiotrackOutlined";
+import AlbumOutlinedIcon from "@mui/icons-material/AlbumOutlined";
 
 const Aside = () => {
+  return (
+    <Grid
+      container
+      sx={{
+        paddingTop: "45px",
+        height: "100%",
+        display: "flex",
+        flexWrap: "nowrap",
+      }}
+    >
+      <Grid
+        item
+        sx={{
+          position: "fixed", // Закрепляем элемент
+          top: '30px', // Располагаем элемент в верхней части экрана
+          left: 0, // Располагаем элемент в левой части экрана
+          height: "100vh", // Высота элемента равна высоте видимой части экрана
+          width: "300px", // Ширина элемента
+          padding: "30px",
+          opacity: "0.8",
+          display: "flex",
+          flexDirection: "column",
+          borderRadius: "4px",
+         
+        
+          overflowY: "auto", // Разрешаем прокрутку, если контент переполняет высоту
+        }}
+      >
+        <p
+          style={{
+            color: "#9c9b94",
+            fontSize: "20px",
+            fontWeight: "500",
+            marginBottom: "20px",
+          }}
+        >
+          Меню
+        </p>
+        <NavLink
+          to="/playlists"
+          style={{ textDecoration: "none" }}
+        >
+          <Box
+            className="icon"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              padding: "10px",
+              width: "100%",
+            }}
+          >
+            <Album />
+            <span
+              className="link"
+              style={{ marginLeft: "10px", color: "#f1fbff" }}
+            >
+              Плейлисти
+            </span>
+          </Box>
+        </NavLink>
+        <NavLink to="/tracks" style={{textDecoration: "none" }}>
+          <Box
+            className="icon"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              padding: "10px",
+              width: "100%",
+            }}
+          >
+            <Audiotrack />
+            <span
+              className="link"
+              style={{marginLeft: "10px", color: "#f1fbff" }}
+            >
+              Треки
+            </span>
+          </Box>
+        </NavLink>
 
-return (
-    <Grid container sx={{my:'5px',  display:"flex", flexWrap: 'nowrap'}}>
-            <Grid item style={{minWidth: '300px', flexGrow: '0', padding: '30px', opacity: '0.8', display: 'flex', flexDirection: 'column',
-                borderRadius: '4px', boxShadow:'0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)',}}>
-                <p  style={{fontSize: '20px', fontWeight: '500', marginBottom: '20px'}}>Меню</p>
-                <Box className='icon'>
-                    <Album />
-                    < NavLink to="/playlists" className='link'>Плейлисти</ NavLink>
-                </Box>
-                <Box className='icon'>
-                    <Audiotrack />
-                    < NavLink to="/tracks" className='link'>Треки</ NavLink>
-                </Box>
-                {/* <Box className='icon'>
-                    <Radio />
-                    < NavLink to="/player" className='link'>Плеєр</ NavLink>
-                </Box> */}
-                <p  style={{fontSize: '20px', fontWeight: '500', marginBottom: '20px'}}>Моя медіатека</p>
-                <Box className='icon'>
-                    <AlbumOutlinedIcon/>
-                    < NavLink to="/myPlaylist" className='link'>Мої плейлисти</ NavLink>
-                </Box>
-                <Box className='icon'>
-                    < AudiotrackOutlinedIcon  />
-                    < NavLink to="/myTracks" className='link'>Мої треки</ NavLink>
-                </Box>
-            </Grid>
-            <Grid item sx={{flexGrow: '1'}}>
-                <Outlet />
-            </Grid>
+        <NavLink to="/myPlaylist" style={{ textDecoration: "none" }}>
+          <Box
+            className="icon"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              padding: "10px",
+              width: "100%",
+            }}
+          >
+            <AlbumOutlinedIcon />
+            <span
+              className="link"
+              style={{ marginLeft: "10px", color: "#f1fbff" }}
+            >
+              Мої плейлисти
+            </span>
+          </Box>
+        </NavLink>
+
+        <NavLink to="/myTracks" style={{ textDecoration: "none" }}>
+          <Box
+            className="icon"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              padding: "10px",
+              width: "100%",
+            }}
+          >
+            <AudiotrackOutlinedIcon />
+            <span
+              className="link"
+              style={{ marginLeft: "10px", color: "#f1fbff" }}
+            >
+              Мої треки
+            </span>
+          </Box>
+        </NavLink>
+      </Grid>
+      <Grid item sx={{ flexGrow: "1", marginLeft: "300px" }}> {/* Добавляем marginLeft для контента */}
+        <Outlet />
+      </Grid>
     </Grid>
-    )
-}
+  );
+};
 
 export default Aside;

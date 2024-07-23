@@ -64,8 +64,8 @@ const FooterPlayer = () => {
 
   return (
     <>  
-    <Box sx={{ marginTop:'200px',}}/>
-        <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, maxWidth: '100vw' , backgroundColor: '#fff', boxShadow: '0px -10px 10px 0px rgba(0,0,0,0.75)'}}>
+   
+        <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, maxWidth: '100vw' , backgroundColor: '#212121', boxShadow: '0px -10px 10px 0px rgba(0,0,0,0.75)'}}>
           <Box sx={{ position: 'relative', zIndex: 50, marginTop:'20px' }}>
               <Box sx={{my:1, width: '100%', display: "flex", justifyContent: "space-evenly", alignItems: 'center', color:'white' }}>
                   {`${Math.floor(currentTime / 60) < 10 ? "0" : ""}${Math.floor(currentTime / 60)} : ${Math.round(currentTime % 60) < 10 ? "0" : ""}${Math.round(currentTime % 60)}`}
@@ -83,12 +83,12 @@ const FooterPlayer = () => {
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", justifyContent: 'space-around' }}>
                   <Box >
-                      <IconButton onClick={handlePrevTrack}><FastRewindRounded /> </IconButton>
+                      <IconButton sx={{ color:'red' }} onClick={handlePrevTrack}><FastRewindRounded /> </IconButton>
                       {playerState.isPlaying === true ? <IconButton onClick={handlePause}> <PauseRounded /></IconButton>
-                          : <IconButton onClick={handlePlay}> <PlayArrowRounded /></IconButton>
+                          : <IconButton sx={{ color:'red' }} onClick={handlePlay}> <PlayArrowRounded /></IconButton>
                       }
-                      <IconButton onClick={handleNextTrack}><FastForwardRounded /></IconButton>
-                      <IconButton onClick={handleStop}><Stop /></IconButton>
+                      <IconButton sx={{ color:'red' }} onClick={handleNextTrack}><FastForwardRounded /></IconButton>
+                      <IconButton sx={{ color:'red' }} onClick={handleStop}><Stop /></IconButton>
                   </Box>
                   <Box sx={{color:'white' }}>
                       <Typography style={{ textAlign: "center", padding: "0 5px" }}>

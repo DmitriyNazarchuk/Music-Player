@@ -22,7 +22,7 @@ const AudioVisualizer = () => {
             const dataArray = new Uint8Array(bufferLength);
             getAnalyser()?.getByteFrequencyData(dataArray);
 
-            ctx.fillStyle = "#000";
+            ctx.fillStyle = "#212121";
             ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
             let x = 0;

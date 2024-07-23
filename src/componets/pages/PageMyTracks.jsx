@@ -112,7 +112,7 @@ const PageMyTracks = () => {
                                                             backgroundColor: snapshot.isDragging ? 'lightgrey' : 'inherit',
                                                         }}
                                                     >
-                                                        <TableCell>
+                                                        <TableCell >
                                                             {playerState?.track?._id === item._id && playerState?.isPlaying === true ? (
                                                                 <IconButton onClick={() => { handleStop() }}>
                                                                     <PauseRounded />

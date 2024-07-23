@@ -31,6 +31,8 @@ const Header = (prop) => {
   const { data, isLoading } = useGetUserByIdQuery({ _id: id });
   const [searchResults, setSearchTracks] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [displayedTracks, setDisplayedTracks] = useState([]);
+    const [page, setPage] = useState(0);
   const isLoggedIn = prop.props
   const { isLoadingSerch, refetch } = useSearchTrackQuery({ title: searchQuery })
   
@@ -70,7 +72,7 @@ const Header = (prop) => {
 
   return (
     <Box sx={{ flexGrow: 1, color:'#020202'}}>
-      <AppBar position="static" >
+      <AppBar position="fixed" >
         <Toolbar sx={{ justifyContent: 'space-between', backgroundColor:'#020202'}}>
           <Typography component="h1" variant="h5" >
             <Link 
@@ -85,15 +87,20 @@ const Header = (prop) => {
                 </IconButton>
               </Box>
             <Box>
-              <InputBase
-                sx={{width: '400px', color: '#fff'}}
-                placeholder="Пошук музики…"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+            <InputBase
+          sx={{ width: "400px", color: "#000" }}
+          placeholder="Пошук музики…"
+          value={searchQuery}
+          onChange={(e) => {
+            setPage(0);
+            setDisplayedTracks([]);
+            setSearchQuery(e.target.value);
+          }}
+        />
             </Box>
             <Box>
-              <IconButton  sx={{padding: '1px'}} onClick={() => setSearchQuery('')}>
+              <IconButton  sx={{padding: '1px'}} onClick={() => setSearchQuery('')
+              }>
                 <CloseOutlinedIcon />
               </IconButton>
             </Box>
