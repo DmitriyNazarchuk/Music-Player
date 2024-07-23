@@ -14,6 +14,9 @@ const Basic = ({ uploadResult, prop }) => {
     const { data, isLoading } = useGetUserByIdQuery({ _id: id });
     const [files, setFiles] = useState([]);
     const [error, setError] = useState(null);
+    const [title, setTitle] = useState('');
+    const [artist, setArtist] = useState('');
+    const [album, setAlbum] = useState('');
 
     useEffect(() => {
         if (!isLoading && data) {
@@ -28,7 +31,8 @@ const Basic = ({ uploadResult, prop }) => {
         for (const file of acceptedFiles) {
             try {
                 if (file.type.startsWith('image/')) {
-                    const result = await uploadFile('photo', file, 'upload', stateAuth.token);
+                    const id3 = { title, artist, album,};
+                    const result = await uploadFile('photo', file, id3, 'upload', stateAuth.token);
                     if (result) {
                         uploadResult(result._id);
                         setFiles([...files, file]);
@@ -67,10 +71,10 @@ const Basic = ({ uploadResult, prop }) => {
         <section className="container">
             <div {...getRootProps({className: 'dropzone'})}>
                 <input {...getInputProps()} />
-                <p>Перетягніть файли сюди або натисніть, щоб завантажити</p>
+                <p style={{color:"#d1d8d6",}}> Перетягніть файли сюди або натисніть, щоб завантажити</p>
             </div>
             <aside>
-                <h4>Загружені файли</h4>
+                <h4 style={{color:"#d1d8d6",}}>Загружені файли</h4>
                 {files.map((file, index) => (
                     <li key={index}>
                         {file.name}{file.url}

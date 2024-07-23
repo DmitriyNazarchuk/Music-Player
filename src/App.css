@@ -45,4 +45,15 @@ scrollbar-color: rgba(0, 0, 0, 0.3) #f1f1f1;
   ::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.5);
   }
-  
+  .css-p1scmp-MuiButtonBase-root-MuiButton-root{
+    background-color: #1d1d1d !important;
+  }
+  .css-1pypu77-MuiButtonBase-root-MuiButton-root:hover{
+    background-color: red !important;
+  }
+  .css-mhc70k-MuiGrid-root{
+    padding-top: 50px;
+  }
+  .css-1htmd0r{
+    height: 100vw;
+  }

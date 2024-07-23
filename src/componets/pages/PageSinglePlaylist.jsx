@@ -63,15 +63,15 @@ const PageSinglePlaylist = () => {
         <>
             <Box sx={{ mx: 1 }}>
                 <Box sx={{ mx: 5,my:3, display: 'flex', flexDirection: 'column' }}>
-                    <Typography gutterBottom variant="h4" component="div">
+                    <Typography gutterBottom variant="h4" component="div" sx={{color:"#d1d8d6",}}>
                         {playlist?.PlaylistFindOne.name || 'Немає назви'}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="text.secondary" sx={{color:"#d1d8d6",}}>
                         {data.PlaylistFindOne.description || 'Немає опису'}
                     </Typography>
                 </Box>
                 <Box sx={{ mx: 1 }}>
-                    <Typography gutterBottom variant="h6" component="div" sx={{ mx: 5, my: 1 }}>Треки</Typography>
+                    <Typography gutterBottom variant="h6" component="div" sx={{ mx: 5, my: 1, color:"#d1d8d6",}}>Треки</Typography>
                     <DragDropContext onDragEnd={handleDragEnd}>
                         <TableContainer component={Paper} sx={{ mx: 5, my: 2, width:'90%'}}>
                             <Table aria-label="simple table">

@@ -83,7 +83,7 @@ const PageMyTracks = () => {
             <Grid container sx={{ mx: 5, width: '90%' }}>
                 <Box>
                     <CardContent md={12} sx={{ my: 1, width: '100%' }}>
-                        <Typography component="h1" variant="h4" sx={{ marginBottom: '10px' }}>Мої треки</Typography>
+                        <Typography component="h1" variant="h4" sx={{ marginBottom: '10px', color:"#d1d8d6"}}>Мої треки</Typography>
                     </CardContent>
                 </Box>
                 <DragDropContext onDragEnd={handleDragEnd}>
