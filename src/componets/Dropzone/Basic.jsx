@@ -6,42 +6,37 @@ import { useSelector, useDispatch } from "react-redux";
 import { useGetUserByIdQuery} from '../../redux/api';
 import { setAboutMe } from "../../redux/slice/authSlice";
 
-const Basic = ({ uploadResult, prop }) => {
-
+const Basic = ({ uploadResult, prop, trackTitle, trackArtist, trackAlbum }) => {
     const stateAuth = useSelector((state) => state.persistedReducer.auth);
     const id = stateAuth.payload.sub.id;
     const dispatch = useDispatch();
     const { data, isLoading } = useGetUserByIdQuery({ _id: id });
     const [files, setFiles] = useState([]);
     const [error, setError] = useState(null);
-    const [title, setTitle] = useState('');
-    const [artist, setArtist] = useState('');
-    const [album, setAlbum] = useState('');
 
     useEffect(() => {
         if (!isLoading && data) {
             dispatch(setAboutMe(data.UserFindOne));
         }
-        if(prop) {
+        if (prop) {
             setFiles([]);
         }
     }, [data, isLoading, dispatch, prop]);
-    
+
     const handleDrop = async (acceptedFiles) => {
         for (const file of acceptedFiles) {
             try {
                 if (file.type.startsWith('image/')) {
-                    const id3 = { title, artist, album,};
-                    const result = await uploadFile('photo', file, id3, 'upload', stateAuth.token);
+                    const result = await uploadFile('photo', file, 'upload', stateAuth.token);
                     if (result) {
                         uploadResult(result._id);
                         setFiles([...files, file]);
                     }
                 } else if (file.type.startsWith('audio/')) {
-                    const res = await uploadFile('track', file, 'track', stateAuth.token);
+                    const res = await uploadFile('track', file, 'track', stateAuth.token, trackTitle, trackArtist, trackAlbum);
                     if (res) {
                         uploadResult(res._id, res.url);
-                       setFiles([...files, { id: res._id, url: res.url }]);
+                        setFiles([...files, { id: res._id, url: res.url }]);
                     }
                 } else {
                     console.log(`Непідтримуваний тип файлу: ${file.type}`);
@@ -69,12 +64,12 @@ const Basic = ({ uploadResult, prop }) => {
 
     return (
         <section className="container">
-            <div {...getRootProps({className: 'dropzone'})}>
+            <div {...getRootProps({ className: 'dropzone' })}>
                 <input {...getInputProps()} />
-                <p style={{color:"#d1d8d6",}}> Перетягніть файли сюди або натисніть, щоб завантажити</p>
+                <p>Перетягніть файли сюди або натисніть, щоб завантажити</p>
             </div>
             <aside>
-                <h4 style={{color:"#d1d8d6",}}>Загружені файли</h4>
+                <h4>Загружені файли</h4>
                 {files.map((file, index) => (
                     <li key={index}>
                         {file.name}{file.url}

@@ -7,6 +7,8 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { setTrack, play, stop } from '../../redux/slice/playerSlice';
 
+
+
 const PageSearchTracks = () => {
     const dispatch = useDispatch();
     const playerState = useSelector(state => state.persistedReducer.player);
@@ -102,3 +104,4 @@ const PageSearchTracks = () => {
 }
 
 export default PageSearchTracks;
+

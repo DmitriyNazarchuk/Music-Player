@@ -1,35 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Basic from "../Dropzone/Basic";
-import { useNavigate } from "react-router-dom";
-import { useUpsertPlaylistMutation } from "../../redux/api";
-import { Input } from "@mui/base/Input";
-import { useParams } from "react-router-dom";
-import { useGetPlaylistIdQuery } from "../../redux/api";
 import {
+  Button,
+  TextField,
+  Box,
+  Typography,
+  IconButton,
   Grid,
   Table,
   TableCell,
   TableContainer,
   TableRow,
   TableHead,
-  Box,
   Paper,
-  Typography,
   TableBody,
+  CircularProgress,
+  Modal,
+  InputBase,
 } from "@mui/material";
-import { IconButton } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { useUpsertPlaylistMutation, useGetPlaylistIdQuery, useSearchTrackQuery } from "../../redux/api";
+import Basic from "../Dropzone/Basic";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { CircularProgress } from "@mui/material";
-import Modal from "@mui/material/Modal";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import SearchIcon from "@mui/icons-material/Search";
-import InputBase from "@mui/material/InputBase";
-import { useSearchTrackQuery } from "../../redux/api";
-import { setSearchResults } from "../../redux/slice/searchSlice";
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
+import { setSearchResults } from "../../redux/slice/searchSlice";
 
 const style = {
   position: "absolute",
@@ -46,34 +42,33 @@ const style = {
 const PageCreatingAndEditingPlaylist = () => {
   const dispatch = useDispatch();
   const [upsertPlaylistMutation] = useUpsertPlaylistMutation();
-  let [tracksId, setTracksId] = useState([]);
+  const [tracksId, setTracksId] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  let { id } = useParams();
+  const { id: paramId } = useParams();
   const { isLoadingSerch, refetch: serchRefetch } = useSearchTrackQuery({
     title: searchQuery,
   });
-  const [searchResults, setSearchTracks] = useState([]);
-
-  if (id === undefined) {
-    id = "";
-  }
-
+  const id = paramId || "";
   const { data, isLoading, refetch } = useGetPlaylistIdQuery({ _id: id });
   const [playlist, setMyPlaylist] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  let [tracks, setTracks] = useState([]);
+  const [tracks, setTracks] = useState([]);
   const [openModal, setOpenModal] = useState(false);
-  let [loadFile, setLoadFile] = useState(false);
+  const [loadFile, setLoadFile] = useState(false);
+  const [searchResults, setSearchTracks] = useState([]);
+  const [trackTitle, setTrackTitle] = useState("");
+  const [trackArtist, setTrackArtist] = useState("");
+  const [trackAlbum, setTrackAlbum] = useState("");
 
   useEffect(() => {
     if (data?.PlaylistFindOne) {
-      setMyPlaylist(data?.PlaylistFindOne);
-      setName(data?.PlaylistFindOne?.name || "");
-      setDescription(data?.PlaylistFindOne?.description || "");
-      setTracks(data?.PlaylistFindOne?.tracks || []);
-      let tracksArrId = data?.PlaylistFindOne?.tracks.map((i) => i._id);
-      setTracksId(tracksArrId);
+      const { name, description, tracks } = data.PlaylistFindOne;
+      setMyPlaylist(data.PlaylistFindOne);
+      setName(name || "");
+      setDescription(description || "");
+      setTracks(tracks || []);
+      setTracksId(tracks.map((i) => i._id));
     }
     if (searchQuery === "") {
       setSearchTracks([]);
@@ -82,27 +77,25 @@ const PageCreatingAndEditingPlaylist = () => {
 
   const handleUploadResult = (id) => {
     setTracksId((prevIds) => [...prevIds, id]);
+    addTrack(id, trackTitle, trackArtist, trackAlbum);
   };
 
   const navigate = useNavigate();
 
   const creatPlaylist = async () => {
     try {
-      let playlistId;
-      if (id !== undefined) {
-        playlistId = id;
-      } else {
-        playlistId = "";
-      }
-      let newTracksId = tracksId.map((i) => {
-        let item = { _id: i };
-        return item;
-      });
+      const playlistId = id || "";
+      const newTracksId = tracksId.map((i) => ({ _id: i }));
       const res = await upsertPlaylistMutation({
-        playlistId: playlistId,
+        playlistId,
         namePls: name,
         descriptionPls: description,
         tracksId: newTracksId,
+        id3: {
+          title: trackTitle,
+          artist: trackArtist,
+          album: trackAlbum,
+        },
       });
       if (res) {
         if (id === "") {
@@ -115,26 +108,21 @@ const PageCreatingAndEditingPlaylist = () => {
       }
       setName("");
       setDescription("");
+      setTrackTitle("");
+      setTrackArtist("");
+      setTrackAlbum("");
     } catch (error) {
       console.error(error);
     }
   };
 
-  const addTrack = async (trackId) => {
+ const addTrack = async (trackId,) => {
     tracksId.push(trackId);
     try {
-      let playlistId;
-      if (id !== undefined) {
-        playlistId = id;
-      } else {
-        playlistId = "";
-      }
-      let newTracksId = tracksId.map((i) => {
-        let item = { _id: i };
-        return item;
-      });
+      const playlistId = id || "";
+      const newTracksId = tracksId.map((i) => ({ _id: i }));
       const res = await upsertPlaylistMutation({
-        playlistId: playlistId,
+        playlistId,
         namePls: name,
         descriptionPls: description,
         tracksId: newTracksId,
@@ -160,336 +148,156 @@ const PageCreatingAndEditingPlaylist = () => {
       setTracks(updatedTracks);
       await refetch();
     } catch (error) {
-      console.error("Не вдалося видалити трек", error);
+      console.error(error);
     }
   };
 
-  const handleSearch = async () => {
-    try {
-      let res = await serchRefetch({ title: searchQuery });
-      if (res) {
-        setSearchTracks(res.data?.TrackFind);
-        dispatch(setSearchResults(searchResults));
+  const handleSearch = async (event) => {
+    if (event.key === "Enter" || event.key === "Tab") {
+      event.preventDefault();
+      const { data: searchResults } = await serchRefetch();
+      if (searchResults && searchResults.TrackFind) {
+        setSearchTracks(searchResults.TrackFind);
       }
-    } catch (error) {
-      console.error("Помилка пошуку", error);
     }
   };
 
-  return isLoading ? (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        margin: "100px",
-      }}
-    >
-      <CircularProgress />
-    </Box>
-  ) : (
-    <Grid item md={12} sx={{ mx: 1 }}>
-      <Box sx={{ mx: 4, display: "flex", flexDirection: "column" }}>
-        <>
-          {id !== "" ? (
-            <Typography
-              component="h1"
-              variant="h4"
-              sx={{ my: 5, mx: 4, color: "#c3c8c4" }}
-            >
-              Редагування плейлиста
-            </Typography>
-          ) : (
-            <Typography
-              component="h1"
-              variant="h4"
-              sx={{ my: 5, mx: 4, color: "#c3c8c4" }}
-            >
-              Створення плейлиста
-            </Typography>
-          )}
-        </>
-        {id !== "" ? (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              border: "1px solid grey",
-              width: "500px",
-              borderRadius: "5px",
-            }}
-          >
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  return (
+    <Grid container>
+      <Grid item xs={12}>
+        <Typography variant="h4" component="h2" gutterBottom>
+          {id ? "Редагувати Плейлист" : "Створити Плейлист"}
+        </Typography>
+        <Box component="form" sx={{ width: "600px" }}>
+          <TextField
+            fullWidth
+            label="Назва Плейлиста"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            variant="outlined"
+            sx={{ my: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="Опис"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            variant="outlined"
+            sx={{ my: 2 }}
+          />
+          <Box sx={{ my: 2, display: "flex", flexDirection: "row", alignItems: "flex-start" }}>
             <Box>
-              <IconButton
-                sx={{ padding: "1px" }}
-                onClick={() => handleSearch()}
-              >
-                <SearchIcon />
-              </IconButton>
+              <Typography variant="body2" sx={{ color: "#ced4d2", textAlign: "center" }}>
+                Завантажити трек:
+              </Typography>
             </Box>
-            <Box>
-              <InputBase
-                sx={{ width: "400px" }}
-                placeholder="Пошук музики…"
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                }}
-              />
-            </Box>
-            <Box>
-              <IconButton
-                sx={{ padding: "1px" }}
-                onClick={() => setSearchQuery("")}
-              >
-                <CloseOutlinedIcon />
-              </IconButton>
+            <Box sx={{ width: "300px" }}>
+              <Basic uploadResult={handleUploadResult} prop={loadFile}
+              trackTitle={trackTitle}
+              trackArtist={trackArtist}
+              trackAlbum={trackAlbum} />
             </Box>
           </Box>
-        ) : null}
+          <TextField
+            fullWidth
+            label="Назва трека"
+            value={trackTitle}
+            onChange={(e) => setTrackTitle(e.target.value)}
+            variant="outlined"
+            sx={{ my: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="Виконавець"
+            value={trackArtist}
+            onChange={(e) => setTrackArtist(e.target.value)}
+            variant="outlined"
+            sx={{ my: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="Альбом"
+            value={trackAlbum}
+            onChange={(e) => setTrackAlbum(e.target.value)}
+            variant="outlined"
+            sx={{ my: 2 }}
+          />
+        </Box>
+        <Button variant="contained" color="primary" onClick={creatPlaylist}>
+          {id ? "Зберегти зміни" : "Створити Плейлист"}
+        </Button>
+      </Grid>
+      <Grid item xs={12} sx={{ mt: 4 }}>
+        <Typography variant="h6" component="h4">
+          Треки у плейлисті
+        </Typography>
         <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead></TableHead>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Дія</TableCell>
+                <TableCell>Назва трека</TableCell>
+                <TableCell>Альбом</TableCell>
+                <TableCell>Виконавець</TableCell>
+              </TableRow>
+            </TableHead>
             <TableBody>
-              {searchResults?.map((item, index) => (
-                <TableRow key={index}>
+              {tracks.map((track) => (
+                <TableRow key={track._id}>
                   <TableCell>
-                    <IconButton
-                      onClick={() => {
-                        addTrack(item._id);
-                      }}
-                    >
-                      <AddCircleSharpIcon />
+                    <IconButton onClick={() => handleDelete(track._id)}>
+                      <DeleteIcon />
                     </IconButton>
                   </TableCell>
-                  <TableCell>
-                    {item.id3 === null
-                      ? "Без назви"
-                      : item.id3.title !== null
-                      ? item.id3.title
-                      : "Без назви"}
-                  </TableCell>
-                  <TableCell>
-                    {item.id3 === null
-                      ? "Без назви"
-                      : item.id3.album !== null
-                      ? item.id3.album
-                      : "Без назви"}
-                  </TableCell>
-                  <TableCell>
-                    {item.id3 === null
-                      ? "Без назви"
-                      : item.id3.artist !== null
-                      ? item.id3.artist
-                      : "Без назви"}
-                  </TableCell>
+                  <TableCell>{track.id3?.title || "Без назви"}</TableCell>
+                  <TableCell>{track.id3?.album || "Без назви"}</TableCell>
+                  <TableCell>{track.id3?.artist || "Без назви"}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-
-        <Box component="form" sx={{ width: "600px" }}>
-          <Box
+      </Grid>
+      
+      <Modal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Плейлист оновлено
+          </Typography>
+          <IconButton
+            aria-label="close"
+            onClick={() => setOpenModal(false)}
             sx={{
-              my: 2,
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "flex-start",
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
             }}
           >
-            <Box>
-              <Typography
-                variant="body2"
-                sx={{ color: "#ced4d2", textAlign: "center" }}
-              >
-                Завантажити трек:
-              </Typography>
-            </Box>
-            <Box sx={{ width: "300px" }}>
-              <Basic uploadResult={handleUploadResult} prop={loadFile} />
-            </Box>
-          </Box>
-          <Grid
-            container
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              color: "#ced4d2",
-              alignItems: "flex-start",
-            }}
-          >
-            <Grid item xs={4}>
-              Назва плейлиста:
-            </Grid>
-            <Grid
-              item
-              xs={6}
-              sx={{
-                color: "#ced4d2",
-                "& .MuiInputBase-root": {
-                  color: "#ced4d2", // Цвет текста
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#ced4d2", // Цвет бордера по умолчанию
-                  },
-
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#827e72", // Цвет бордера при фокусе
-                  },
-                },
-                "& .MuiInputLabel-root": {
-                  color: "#ced4d2", // Цвет лейбла по умолчанию
-                },
-                "& .MuiInputLabel-root.Mui-focused": {
-                  color: "#827e72", // Цвет лейбла при фокусе
-                },
-              }}
-            >
-              <TextField
-                fullWidth
-                label="Додати назву"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            sx={{
-              color: "#ced4d2",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "flex-start",
-            }}
-          >
-            <Grid item xs={4}>
-              Опис плейлиста:
-            </Grid>
-            <Grid item xs={6} sx={{ color: "#ced4d2" }}>
-              <Input
-                aria-label="Demo input"
-                multiline
-                placeholder="Додати опис…"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </Grid>
-          </Grid>
-          <Box sx={{ my: 5 }}>
-            <Button
-              variant="contained"
-              sx={{ backgroundColor: "#1d1d1d",
-                color: "#d1d8d6",
-                my: 2,
-                mx: 2,
-                "&:hover": { backgroundColor: "red" }, }}
-              onClick={() => creatPlaylist()}
-            >
-              Зберегти
-            </Button>
-            <Button 
-              variant="contained"
-              sx={{ backgroundColor: "#1d1d1d",
-                color: "#d1d8d6",
-                my: 2,
-                mx: 2,
-                "&:hover": { backgroundColor: "red" },}}
-              onClick={() => navigate(-1)}
-            >
-              Вийти
-            </Button>
-          </Box>
-          {id !== undefined ? (
-            <>
-              <TableContainer component={Paper} sx={{ width: "1000px" }}>
-                <Table aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>
-                        <IconButton />
-                      </TableCell>
-                      <TableCell>Назва</TableCell>
-                      <TableCell>Альбом</TableCell>
-                      <TableCell>Виконавець</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {tracks?.map((item, index) => (
-                      <TableRow key={index}>
-                        <TableCell>
-                          <IconButton
-                            onClick={() => {
-                              handleDelete(item._id);
-                            }}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </TableCell>
-                        <TableCell>
-                          {item.id3 === null
-                            ? "Без назви"
-                            : item.id3.title !== null
-                            ? item.id3.title
-                            : "Без назви"}
-                        </TableCell>
-                        <TableCell>
-                          {item.id3 === null
-                            ? "Без назви"
-                            : item.id3.album !== null
-                            ? item.id3.album
-                            : "Без назви"}
-                        </TableCell>
-                        <TableCell>
-                          {item.id3 === null
-                            ? "Без назви"
-                            : item.id3.artist !== null
-                            ? item.id3.artist
-                            : "Без назви"}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <Modal
-                open={openModal}
-                onClose={() => {
-                  setOpenModal(false);
-                  setLoadFile(false);
-                }}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style}>
-                  <IconButton
-                    sx={{
-                      padding: "1px",
-                      position: "absolute",
-                      right: "0",
-                      top: "0",
-                    }}
-                    onClick={() => {
-                      setOpenModal(false);
-                      setLoadFile(false);
-                    }}
-                  >
-                    <CloseOutlinedIcon />
-                  </IconButton>
-                  <Typography
-                    id="modal-modal-title"
-                    variant="h6"
-                    component="h2"
-                  >
-                    Данні плейлиста успішно збережені.
-                  </Typography>
-                </Box>
-              </Modal>
-            </>
-          ) : null}
+            <CloseOutlinedIcon />
+          </IconButton>
         </Box>
-      </Box>
+      </Modal>
     </Grid>
   );
 };

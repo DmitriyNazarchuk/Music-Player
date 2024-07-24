@@ -1,9 +1,11 @@
 import { backendUrl } from "../redux/slice/playerSlice"
 
-export const uploadFile = async (fileName, file, fetchUrl, authToken) => {
+export const uploadFile = async (fileName, file, fetchUrl, authToken,trackTitle,trackAlbum, trackArtist,) => {
     const formData = new FormData();
     formData.append(fileName, file);
-
+    formData.append('title', trackTitle);
+    formData.append('artist', trackArtist);
+    formData.append('album', trackAlbum);
     const headers = authToken ? { Authorization: 'Bearer ' + authToken } : {};
 
     try {
