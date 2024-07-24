@@ -1,4 +1,5 @@
 
+::-webkit-scrollbar { width: 0;}
 .containerReg {
     display: flex;
     justify-content: center;

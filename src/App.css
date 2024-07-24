@@ -57,3 +57,8 @@ scrollbar-color: rgba(0, 0, 0, 0.3) #f1f1f1;
   .css-1htmd0r{
     height: 100vw;
   }
+  .css-11lq3yg-MuiGrid-root{
+    padding-bottom: 150px;
+    padding-top:30px;
+    overflow-y: auto;
+  }
