@@ -149,6 +149,7 @@ const PageProfileEditing = () => {
           <Grid
             container
             sx={{
+              color: "white",
               my: 2,
               display: "flex",
               flexDirection: "row",
@@ -166,6 +167,23 @@ const PageProfileEditing = () => {
                   label="Нікнейм"
                   value={newNick}
                   onChange={(e) => setNewNick(e.target.value)}
+                  sx={{
+                    color: "white",
+                    "& .MuiOutlinedInput-root.Mui-focused": {
+                      "& fieldset": {
+                        borderColor: "red !important",
+                      },
+                      "& input": {
+                        color: "white !important",
+                      },
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "white !important",
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: "white",
+                    },
+                  }}
                 />
                 <Button
                   variant="contained"
@@ -220,7 +238,21 @@ const PageProfileEditing = () => {
             {showPasswordInput ? (
               <Grid item xs={6}>
                 <TextField
-                  sx={{ my: 1 }}
+                  sx={{
+                    color: "white",
+
+                    "& .MuiOutlinedInput-root.Mui-focused": {
+                      "& fieldset": {
+                        borderColor: "red !important",
+                      },
+                      "& input": {
+                        color: "white !important",
+                      },
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "white !important",
+                    },
+                  }}
                   required
                   fullWidth
                   label="Пароль"
@@ -233,6 +265,21 @@ const PageProfileEditing = () => {
                   label="Новий пароль"
                   autoComplete="new-password"
                   onChange={(e) => setNewPassword(e.target.value)}
+                  sx={{
+                    color: "white",
+                    my: 2,
+                    "& .MuiOutlinedInput-root.Mui-focused": {
+                      "& fieldset": {
+                        borderColor: "red !important",
+                      },
+                      "& input": {
+                        color: "white !important",
+                      },
+                    },
+                    "& .MuiInputLabel-root.Mui-focused": {
+                      color: "white !important",
+                    },
+                  }}
                 />
                 <Button
                   variant="contained"
