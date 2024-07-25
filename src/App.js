@@ -25,9 +25,9 @@ function App() {
     const unsubscribe = store.subscribe(() => {
       let time = store.getState().persistedReducer.player.currentTime;
       if(isPlaying) {
-        document.title = `Аудіо плеєр ${Math.floor(time / 60) < 10 ? "0" : ""}${Math.floor(time / 60)} : ${Math.round(time % 60) < 10 ? "0" : ""}${Math.round(time % 60)}`
+        document.title = `YouTube Music ${Math.floor(time / 60) < 10 ? "0" : ""}${Math.floor(time / 60)} : ${Math.round(time % 60) < 10 ? "0" : ""}${Math.round(time % 60)}`
       } else {
-        document.title = `Аудіо плеєр`;
+        document.title = `YouTube Music`;
       }
       const authState = store.getState().persistedReducer.auth;
       setIsLoggedIn(authState.token);
