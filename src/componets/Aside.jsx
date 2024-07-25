@@ -21,11 +21,11 @@ const Aside = () => {
       <Grid
         item
         sx={{
-          position: "fixed", // Закрепляем элемент
-          top: '30px', // Располагаем элемент в верхней части экрана
-          left: 0, // Располагаем элемент в левой части экрана
-          height: "100vh", // Высота элемента равна высоте видимой части экрана
-          width: "300px", // Ширина элемента
+          position: "fixed",
+          top: '30px', 
+          left: 0, 
+          height: "100vh", 
+          width: "300px",
           padding: "30px",
           opacity: "0.8",
           display: "flex",
@@ -33,7 +33,7 @@ const Aside = () => {
           borderRadius: "4px",
          
         
-          overflowY: "auto", // Разрешаем прокрутку, если контент переполняет высоту
+          overflowY: "auto", 
         }}
       >
         <p
