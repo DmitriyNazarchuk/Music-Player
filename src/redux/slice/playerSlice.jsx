@@ -44,13 +44,17 @@ const playerSlice = createSlice({
           if (audio.src !== `${backendUrl}${state.track.url}`) {
               audio.src = `${backendUrl}${state.track.url}`
               audio.load()
+              audio.addEventListener('canplaythrough', 
+                audio.play, 
+                false);
           }
           audio.volume = state.volume;
-          audio.play()
+          // audio.play()
           state.isPlaying = true
           state.isStopped = false
       }
     },
+    
   // Реплей
   replay(state) {
     if (state.track && state.track.url) {
@@ -65,31 +69,8 @@ const playerSlice = createSlice({
       state.isStopped = false;
     }
   },
-    // play(state) {
-    //   try {
-    //     if (state.track && state.track.url) {
-    //       if (audio.src !== `${backendUrl}${state.track.url}`) {
-    //         audio.src = `${backendUrl}${state.track.url}`;
-    //         audio.load();
-    //       }
-    //       console.log(audio)
-    //       audio.volume = state.volume;
-    //       if (audio.play!== undefined) {
-    //       audio.play().then(() => {
-    //         state.isPlaying = true
-    //         state.isStopped = false
-    //       }).catch(error => {
-    //         console.error("Error playing audio:", error);
-    //         state.error = error;
-    //       })};
-    //     }
-    //   } catch (error) {
 
-    //     console.error("Error playing audio:", error);
-    //   }
-    // },
     
-
     pause(state) {
       audio.pause();
       state.isPlaying = false;
