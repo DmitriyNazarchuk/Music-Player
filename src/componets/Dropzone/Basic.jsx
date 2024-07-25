@@ -5,6 +5,7 @@ import {uploadFile} from "../uploadFile";
 import { useSelector, useDispatch } from "react-redux";
 import { useGetUserByIdQuery} from '../../redux/api';
 import { setAboutMe } from "../../redux/slice/authSlice";
+import { colors } from '@mui/material';
 
 const Basic = ({ uploadResult, prop, trackTitle, trackArtist, trackAlbum }) => {
     const stateAuth = useSelector((state) => state.persistedReducer.auth);
@@ -66,10 +67,10 @@ const Basic = ({ uploadResult, prop, trackTitle, trackArtist, trackAlbum }) => {
         <section className="container">
             <div {...getRootProps({ className: 'dropzone' })}>
                 <input {...getInputProps()} />
-                <p>Перетягніть файли сюди або натисніть, щоб завантажити</p>
+                <p className='dropzoneText'>Перетягніть файли сюди або натисніть, щоб завантажити</p>
             </div>
             <aside>
-                <h4>Загружені файли</h4>
+                <h4 className='dropzoneText'>Загружені файли</h4>
                 {files.map((file, index) => (
                     <li key={index}>
                         {file.name}{file.url}
