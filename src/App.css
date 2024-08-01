@@ -9,7 +9,12 @@ scrollbar-color: rgba(0, 0, 0, 0.3) #f1f1f1;
 }
 .css-1ygcj2i-MuiTableCell-root,
 .css-1ex1afd-MuiTableCell-root,
-.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root,
+.css-q34dxg,
+.css-78trlr-MuiButtonBase-root-MuiIconButton-root,
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input,
+.css-1bigob2,
+.css-q34dxg{
     color: white !important;
 }
 .link{
@@ -24,10 +29,12 @@ scrollbar-color: rgba(0, 0, 0, 0.3) #f1f1f1;
     background-color:  #212121;;
     border-radius: 50px;
 }
-.css-78trlr-MuiButtonBase-root-MuiIconButton-root,
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+/* .css-78trlr-MuiButtonBase-root-MuiIconButton-root,
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input,
+.css-1bigob2,
+.css-q34dxg{
     color: white !important;
-}
+} */
 ::-webkit-scrollbar {
     width: 12px;
     height: 12px;

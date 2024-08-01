@@ -39,7 +39,7 @@ const PageSearchTracks = () => {
 
     return (
         <Grid container sx={{ mx: 5, my: 3, width: '80%' }}>
-            {tracksToDisplay.length <= 0 ?
+            {!tracksToDisplay || tracksToDisplay.length === 0 ? 
                 <Box>
                     <CardContent sx={{ width: '100%' }} >
                         <Typography component="h1" variant="h4" sx={{ marginBottom: '30px' }}>Жодного треку за запитом не знайдено</Typography>
